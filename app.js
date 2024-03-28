@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const docgiaRouter = require("./app/routes/docgia.route");
+const sachRouter = require("./app/routes/sach.route");
+const nhaxuatbanRouter = require("./app/routes/nhaxuatban.route");
 const ApiError = require("./app/api-error");
 
 const app = express();
@@ -8,6 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/docgia", docgiaRouter);
+app.use("/api/sach", sachRouter);
+app.use("/api/nhaxuatban", nhaxuatbanRouter);
 
 // handle 404 response
 app.use((req, res, next) => {

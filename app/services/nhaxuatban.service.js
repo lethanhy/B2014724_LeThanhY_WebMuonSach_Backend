@@ -1,42 +1,39 @@
 const { ObjectId } = require("mongodb");
 
-class DocgiaService {
+class NhaxuatbanService {
     constructor(client) {
-        this.Docgia = client.db().collection("docgia");
+        this.Nhaxuatban = client.db().collection("nhaxuatban");
     }
     // Định nghĩa các phương thức truy xuất CSDL sử dụng mongodb API
-    extractDocgiaData(payload) {
-        const docgia = {
-            holot: payload.holot,
+    extractNhaxuatbanData(payload) {
+        const nhaxuatban = {
             ten: payload.ten,
-            ngaysinh: payload.ngaysinh,
-            phai: payload.phai,
             diachi: payload.diachi,
-            dienthoai:payload.dienthoai,
+            
         };
         
          
         //Remove undefined fields
-        Object.keys(docgia).forEach(
-            (key) => docgia[key] === undefined && delete docgia[key]
+        Object.keys(nhaxuatban).forEach(
+            (key) => nhaxuatban[key] === undefined && delete nhaxuatban[key]
         );console.log('thành công')
-        return docgia;
+        return nhaxuatban;
         
     }
 
     async create(payload) {
-        const docgia = this.extractDocgiaData(payload);
-        const result = await this.Docgia.findOneAndUpdate(
-            docgia,
-            { $set: docgia },
+        const nhaxuatban = this.extractNhaxuatbanData(payload);
+        const result = await this.Nhaxuatban.findOneAndUpdate(
+            nhaxuatban,
+            { $set: nhaxuatban },
             { returnDocument: "after", upsert: true }
-        );
+        );console.log('thành công')
         return result.value;
     }
 
 
     async find(filter) {
-        const cursor = await this.Docgia.find(filter);
+        const cursor = await this.Nhaxuatban.find(filter);
         return await cursor.toArray();
     }
 
@@ -47,7 +44,7 @@ class DocgiaService {
     }
 
     async findById(id) {
-        return await this.Docgia.findOne({
+        return await this.Nhaxuatban.findOne({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
     }
@@ -56,8 +53,8 @@ class DocgiaService {
         const filter = {
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         };
-        const update = this.extractDocgiaData(payload);
-        const result = await this.Docgia.findOneAndUpdate(
+        const update = this.extractNhaxuatbanData(payload);
+        const result = await this.Nhaxuatban.findOneAndUpdate(
             filter,
             { $set: update },
             { returnDocument: "after"}
@@ -66,7 +63,7 @@ class DocgiaService {
     }
 
     async delete(id) {
-        const result = await this.Docgia.findOneAndDelete({
+        const result = await this.Nhaxuatban.findOneAndDelete({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
         return result.value;
@@ -77,9 +74,9 @@ class DocgiaService {
     }
 
     async deleteAll() {
-        const result = await this.Docgia.deleteMany({});
+        const result = await this.Nhaxuatban.deleteMany({});
         return result.deletedCount;
     }
 
 }
-module.exports = DocgiaService;
+module.exports = NhaxuatbanService;

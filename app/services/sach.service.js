@@ -1,34 +1,33 @@
 const { ObjectId } = require("mongodb");
 
-class DocgiaService {
+class SachService {
     constructor(client) {
-        this.Docgia = client.db().collection("docgia");
+        this.Sach = client.db().collection("sach");
     }
     // Định nghĩa các phương thức truy xuất CSDL sử dụng mongodb API
-    extractDocgiaData(payload) {
-        const docgia = {
-            holot: payload.holot,
-            ten: payload.ten,
-            ngaysinh: payload.ngaysinh,
-            phai: payload.phai,
-            diachi: payload.diachi,
-            dienthoai:payload.dienthoai,
+    extractSachData(payload) {
+        const sach = {
+            tensach: payload.tensach,
+            dongia: payload.dongia,
+            soquyen: payload.soquyen,
+            maNXB: payload.maNXB,
+            tacgia: payload.tacgia,
         };
         
          
         //Remove undefined fields
-        Object.keys(docgia).forEach(
-            (key) => docgia[key] === undefined && delete docgia[key]
+        Object.keys(sach).forEach(
+            (key) => sach[key] === undefined && delete sach[key]
         );console.log('thành công')
-        return docgia;
+        return sach;
         
     }
 
     async create(payload) {
-        const docgia = this.extractDocgiaData(payload);
-        const result = await this.Docgia.findOneAndUpdate(
-            docgia,
-            { $set: docgia },
+        const sach = this.extractSachData(payload);
+        const result = await this.Sach.findOneAndUpdate(
+            sach,
+            { $set: sach },
             { returnDocument: "after", upsert: true }
         );
         return result.value;
@@ -36,7 +35,7 @@ class DocgiaService {
 
 
     async find(filter) {
-        const cursor = await this.Docgia.find(filter);
+        const cursor = await this.Sach.find(filter);
         return await cursor.toArray();
     }
 
@@ -47,7 +46,7 @@ class DocgiaService {
     }
 
     async findById(id) {
-        return await this.Docgia.findOne({
+        return await this.Sach.findOne({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
     }
@@ -56,8 +55,8 @@ class DocgiaService {
         const filter = {
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         };
-        const update = this.extractDocgiaData(payload);
-        const result = await this.Docgia.findOneAndUpdate(
+        const update = this.extractSachData(payload);
+        const result = await this.Sach.findOneAndUpdate(
             filter,
             { $set: update },
             { returnDocument: "after"}
@@ -66,7 +65,7 @@ class DocgiaService {
     }
 
     async delete(id) {
-        const result = await this.Docgia.findOneAndDelete({
+        const result = await this.Sach.findOneAndDelete({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
         return result.value;
@@ -77,9 +76,9 @@ class DocgiaService {
     }
 
     async deleteAll() {
-        const result = await this.Docgia.deleteMany({});
+        const result = await this.Sach.deleteMany({});
         return result.deletedCount;
     }
 
 }
-module.exports = DocgiaService;
+module.exports = SachService;
